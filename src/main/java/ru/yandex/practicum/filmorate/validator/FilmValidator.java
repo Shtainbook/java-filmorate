@@ -33,7 +33,5 @@ public class FilmValidator {
             log.error("ошибка зафиксирована: film - " + film);
             throw new FilmValidationException("Длительность должна быть позитивной");
         }
-
     }
-
 }

@@ -29,7 +29,5 @@ public class UserValidator {
             log.error("ошибка зафиксирована: user - " + user);
             throw new UserValidationException("Нельзя родиться в будущем!");
         }
-
     }
-
 }

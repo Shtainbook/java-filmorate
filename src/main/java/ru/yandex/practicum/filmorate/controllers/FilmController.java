@@ -14,19 +14,19 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-@RequestMapping ("/films")
+@RequestMapping("/films")
 public class FilmController {
 
-    final static Map<Integer, Film> filmBase = new HashMap<>();
+    private final Map<Integer, Film> filmBase = new HashMap<>();
 
     @GetMapping
-    public static List<Film> getFilms() {
+    public List<Film> getFilms() {
         log.debug("Данные о фильмах получены");
         return new ArrayList<>(filmBase.values());
     }
 
     @PostMapping
-    public static void addFilm(@Valid @NotNull @RequestBody Film film) {
+    public void addFilm(@Valid @NotNull @RequestBody Film film) {
         FilmValidator.validationOfFilm(film);
 
         filmBase.put(film.getId(), film);
@@ -34,11 +34,10 @@ public class FilmController {
     }
 
     @PutMapping
-    public static void updateFilm(@Valid @NotNull @RequestBody Film film) {
+    public void updateFilm(@Valid @NotNull @RequestBody Film film) {
         FilmValidator.validationOfFilm(film);
 
         filmBase.put(film.getId(), film);
         log.debug("Фильм успешно обновлен: " + film + ".");
     }
-
 }
