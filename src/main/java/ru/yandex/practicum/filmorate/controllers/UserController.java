@@ -1,7 +1,5 @@
 package ru.yandex.practicum.filmorate.controllers;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +25,7 @@ public class UserController {
     }
 
     @PostMapping
-    public void addFilm(@Valid @NotNull @RequestBody User user) {
+    public void addFilm(@RequestBody User user) {
         UserValidator.validationOfUsers(user);
 
         userBase.put(user.getId(), user);
@@ -35,7 +33,7 @@ public class UserController {
     }
 
     @PutMapping
-    public void updateFilm(@Valid @NotNull @RequestBody User user) {
+    public void updateFilm(@RequestBody User user) {
         UserValidator.validationOfUsers(user);
 
         userBase.put(user.getId(), user);
