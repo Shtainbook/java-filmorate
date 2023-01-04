@@ -24,5 +24,4 @@ public class Film {
     private LocalDate releaseDate;
     @Positive(message = "требуется позитивная длительность")
     private int duration;
-    long filmIdGenerator = 0;
-}
+    }

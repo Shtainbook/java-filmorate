@@ -21,7 +21,7 @@ import java.util.Map;
 public class FilmController {
 
     private final Map<Long, Film> filmBase = new HashMap<>();
-
+    long filmIdGenerator = 0;
     @GetMapping
     public ResponseEntity<List<Film>> getFilms() {
         log.debug("Данные о фильмах получены");
@@ -31,7 +31,7 @@ public class FilmController {
     @PostMapping
     public ResponseEntity<Film> addFilm(@Valid @RequestBody Film film) {
         if (film.getId() < 1) {
-            film.setId(film.getFilmIdGenerator() + 1);
+            film.setId(getFilmIdGenerator() + 1);
         }
         if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
             throw new FilmValidationException(HttpStatus.BAD_REQUEST, "Релиз должен быть не ранее 1895-12-28");
@@ -53,5 +53,9 @@ public class FilmController {
         log.debug("Фильм успешно обновлен: " + film + ".");
         Film temp = filmBase.put(film.getId(), film);
         return null != temp ? new ResponseEntity<>(temp, HttpStatus.OK) : new ResponseEntity<>(temp, HttpStatus.valueOf(404));
+    }
+
+    public long getFilmIdGenerator() {
+        return filmIdGenerator;
     }
 }

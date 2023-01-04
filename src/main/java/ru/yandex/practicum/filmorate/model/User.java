@@ -23,5 +23,5 @@ public class User {
     private String name;
     @Past(message = "Нельзя родиться в будущем")
     private LocalDate birthday;
-    long userIdGenerator = 0;
+
 }

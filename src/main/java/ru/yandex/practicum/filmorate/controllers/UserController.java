@@ -17,7 +17,8 @@ import java.util.*;
 public class UserController {
 
     private final Map<Long, User> userBase = new HashMap<>();
-
+    long userIdGenerator = 0;
+    
     @GetMapping
     public List<User> getUsers() {
 
@@ -28,7 +29,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<User> addUser(@Valid @RequestBody User user) {
         if (user.getId() < 1) {
-            user.setId(user.getUserIdGenerator() + 1);
+            user.setId(getUserIdGenerator() + 1);
         }
 
         if (user.getName() == null){
@@ -46,5 +47,9 @@ public class UserController {
         }
         log.debug("Пользователь успешно обновлен: " + user + ".");
         return null != userBase.put(user.getId(), user) ? new ResponseEntity<>(user, HttpStatus.OK) : new ResponseEntity<>(user, HttpStatus.BAD_REQUEST);
+    }
+
+    public long getUserIdGenerator() {
+        return userIdGenerator;
     }
 }
