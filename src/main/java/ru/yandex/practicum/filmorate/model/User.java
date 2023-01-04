@@ -1,18 +1,27 @@
 package ru.yandex.practicum.filmorate.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
+@Builder(toBuilder = true)
 public class User {
-    int id;
-    String email;
-    String login;
-    String name;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    LocalDate birthday;
+    private long id;
+    @Email(message = "почта не подходит")
+    @NotBlank(message = "введи почту")
+    @NotNull(message = "введи почту")
+    private String email;
+    @Pattern(regexp = "\\S*$")
+    @NotBlank(message = "нужно поправить логин")
+    @NotNull(message = "введи логин")
+    private String login;
+    private String name;
+    @Past(message = "Нельзя родиться в будущем")
+    private LocalDate birthday;
+    long userIdGenerator = 0;
 }
