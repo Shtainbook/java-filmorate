@@ -18,7 +18,7 @@ public class UserController {
 
     private final Map<Long, User> userBase = new HashMap<>();
     long userIdGenerator = 0;
-    
+
     @GetMapping
     public List<User> getUsers() {
 
@@ -32,7 +32,7 @@ public class UserController {
             user.setId(getUserIdGenerator() + 1);
         }
 
-        if (user.getName() == null){
+        if (user.getName() == null || user.getName().isBlank()){
             user.setName(user.getLogin());
         }
 
