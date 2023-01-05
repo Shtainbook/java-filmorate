@@ -37,16 +37,16 @@ public class FilmController {
                 film.setId(filmIdGenerator++);
             }
             if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
-                throw new FilmValidationException(HttpStatus.BAD_REQUEST, "Релиз должен быть не ранее 1895-12-28");
+                //throw new FilmValidationException("Релиз должен быть не ранее 1895-12-28");
+                return new ResponseEntity<>(film, HttpStatus.valueOf(400));
             }
             log.debug("Фильм успешно добавлен: " + film + ".");
             temp = filmBase.put(film.getId(), film);
             //return null != temp ? new ResponseEntity<>(temp, HttpStatus.OK) : new ResponseEntity<>(temp, HttpStatus.valueOf(404));
-            return new ResponseEntity<>(temp, HttpStatus.OK);
+            return new ResponseEntity<>(film, HttpStatus.OK);
         } catch (Exception e) {
-            new ResponseEntity<>(temp, HttpStatus.valueOf(404));
+            return new ResponseEntity<>(film, HttpStatus.valueOf(404));
         }
-        return new ResponseEntity<>(temp, HttpStatus.OK);
     }
 
     @PutMapping
@@ -54,21 +54,20 @@ public class FilmController {
         Film temp = null;
         try {
             if (!filmBase.containsKey(film.getId())) {
-                throw new UserValidationException(HttpStatus.BAD_REQUEST, "нет такого номера, нечего обновлять");
+                return new ResponseEntity<>(film, HttpStatus.NOT_FOUND);
             }
             if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
-                throw new FilmValidationException(HttpStatus.BAD_REQUEST, "Релиз должен быть не ранее 1895-12-28");
+                throw new FilmValidationException("Релиз должен быть не ранее 1895-12-28");
             }
 
             log.debug("Фильм успешно обновлен: " + film + ".");
             temp = filmBase.put(film.getId(), film);
             //return null != temp ? new ResponseEntity<>(temp, HttpStatus.OK) : new ResponseEntity<>(temp, HttpStatus.valueOf(404));
-        return new ResponseEntity<>(temp, HttpStatus.OK);
-        } catch (Exception e){
-            new ResponseEntity<>(temp, HttpStatus.valueOf(404));
+            return new ResponseEntity<>(temp, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(temp, HttpStatus.valueOf(404));
         }
-        return new ResponseEntity<>(temp, HttpStatus.OK);
-        }
+    }
 
     public long getFilmIdGenerator() {
         return filmIdGenerator;

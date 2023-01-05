@@ -36,30 +36,31 @@ public class UserController {
             if (user.getName() == null || user.getName().isBlank()) {
                 user.setName(user.getLogin());
             }
-
+            userBase.put(user.getId(), user);
             log.debug("Пользователь успешно добавлен: " + user + ".");
             //return null != userBase.put(user.getId(), user) ? new ResponseEntity<>(user, HttpStatus.OK) : new ResponseEntity<>(user, HttpStatus.BAD_REQUEST);
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (Exception e) {
-            new ResponseEntity<>(user, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(user, HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(user, HttpStatus.OK);
+
     }
 
     @PutMapping
     public ResponseEntity<User> updateUser(@Valid @RequestBody User user) {
         try {
             if (!userBase.containsKey(user.getId())) {
-                throw new UserValidationException(HttpStatus.NOT_FOUND, "");
+                //throw new UserValidationException("Такого юезра нет. Обновлять нечего.");
+                return new ResponseEntity<>(user, HttpStatus.NOT_FOUND);
             }
 
             log.debug("Пользователь успешно обновлен: " + user + ".");
+            userBase.put(user.getId(), user);
             //return null != userBase.put(user.getId(), user) ? new ResponseEntity<>(user, HttpStatus.OK) : new ResponseEntity<>(user, HttpStatus.BAD_REQUEST);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+            return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (Exception e) {
-            new ResponseEntity<>(user, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(user, HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
 
