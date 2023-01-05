@@ -17,7 +17,7 @@ import java.util.*;
 public class UserController {
 
     private final Map<Long, User> userBase = new HashMap<>();
-    long userIdGenerator = 0;
+    long userIdGenerator = 1;
 
     @GetMapping
     public List<User> getUsers() {
@@ -28,26 +28,40 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<User> addUser(@Valid @RequestBody User user) {
-        if (user.getId() < 1) {
-            user.setId(getUserIdGenerator() + 1);
-        }
+        try {
+            if (user.getId() < 1) {
+                user.setId(userIdGenerator++);
+            }
 
-        if (user.getName() == null || user.getName().isBlank()){
-            user.setName(user.getLogin());
-        }
+            if (user.getName() == null || user.getName().isBlank()) {
+                user.setName(user.getLogin());
+            }
 
-        log.debug("Пользователь успешно добавлен: " + user + ".");
-        return null != userBase.put(user.getId(), user) ? new ResponseEntity<>(user, HttpStatus.OK) : new ResponseEntity<>(user, HttpStatus.BAD_REQUEST);
+            log.debug("Пользователь успешно добавлен: " + user + ".");
+            //return null != userBase.put(user.getId(), user) ? new ResponseEntity<>(user, HttpStatus.OK) : new ResponseEntity<>(user, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        } catch (Exception e) {
+            new ResponseEntity<>(user, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PutMapping
     public ResponseEntity<User> updateUser(@Valid @RequestBody User user) {
-        if (!userBase.containsKey(user.getId())) {
-            throw new UserValidationException(HttpStatus.NOT_FOUND, "");
+        try {
+            if (!userBase.containsKey(user.getId())) {
+                throw new UserValidationException(HttpStatus.NOT_FOUND, "");
+            }
+
+            log.debug("Пользователь успешно обновлен: " + user + ".");
+            //return null != userBase.put(user.getId(), user) ? new ResponseEntity<>(user, HttpStatus.OK) : new ResponseEntity<>(user, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+        } catch (Exception e) {
+            new ResponseEntity<>(user, HttpStatus.BAD_REQUEST);
         }
-        log.debug("Пользователь успешно обновлен: " + user + ".");
-        return null != userBase.put(user.getId(), user) ? new ResponseEntity<>(user, HttpStatus.OK) : new ResponseEntity<>(user, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
+
 
     public long getUserIdGenerator() {
         return userIdGenerator;
