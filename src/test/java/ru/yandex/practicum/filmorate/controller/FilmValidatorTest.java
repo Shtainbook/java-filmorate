@@ -46,7 +46,7 @@ class FilmValidatorTest {
     }
 
     @Test
-    public void validationOfShouldntMakeExceptionWhenAllFine() {
+    public void validationOfShouldNotMakeExceptionWhenAllFine() {
         FilmValidator.validationOfFilm(
                 new Film(1, "медвежуть", "эротодрамма", LocalDate.of(2005, 12, 22), 45));
 

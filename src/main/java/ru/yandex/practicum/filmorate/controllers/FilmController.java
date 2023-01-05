@@ -24,7 +24,7 @@ public class FilmController {
 
     @GetMapping
     public ResponseEntity<List<Film>> getFilms() {
-        log.debug("Данные о фильмах получены");
+        log.debug("Данные о фильмах получены.");
         return filmBase.isEmpty() ? new ResponseEntity<>(new ArrayList<>(filmBase.values()), HttpStatus.NOT_FOUND) : new ResponseEntity<>(new ArrayList<>(filmBase.values()), HttpStatus.OK);
     }
 
@@ -35,12 +35,14 @@ public class FilmController {
                 film.setId(filmIdGenerator++);
             }
             if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
+                log.debug("Проблема с датой выхода фильма.");
                 return new ResponseEntity<>(film, HttpStatus.valueOf(400));
             }
-            log.debug("Фильм успешно добавлен: " + film + ".");
             filmBase.put(film.getId(), film);
+            log.debug("Фильм успешно добавлен: " + film + ".");
             return new ResponseEntity<>(film, HttpStatus.OK);
         } catch (Exception e) {
+            log.debug("Проблема с добавлением фильма.");
             return new ResponseEntity<>(film, HttpStatus.valueOf(404));
         }
     }
@@ -49,15 +51,18 @@ public class FilmController {
     public ResponseEntity<Film> updateFilm(@Valid @RequestBody Film film) {
         try {
             if (!filmBase.containsKey(film.getId())) {
+                log.debug("Проблема с обновлением. Не соответсвует ID.");
                 return new ResponseEntity<>(film, HttpStatus.NOT_FOUND);
             }
             if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
+                log.debug("Проблема с обновлением. Не соответсвует дата выхода.");
                 throw new FilmValidationException("Релиз должен быть не ранее 1895-12-28");
             }
-            log.debug("Фильм успешно обновлен: " + film + ".");
             filmBase.put(film.getId(), film);
+            log.debug("Фильм успешно обновлен: " + film + ".");
             return new ResponseEntity<>(film, HttpStatus.OK);
         } catch (Exception e) {
+            log.debug("Проблема с обновлением. Фильм не обновлен.");
             return new ResponseEntity<>(film, HttpStatus.valueOf(404));
         }
     }

@@ -36,6 +36,7 @@ public class UserController {
             log.debug("Пользователь успешно добавлен: " + user + ".");
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (Exception e) {
+            log.debug("Проблема с добавлением Юзера.");
             return new ResponseEntity<>(user, HttpStatus.BAD_REQUEST);
         }
     }
@@ -44,12 +45,14 @@ public class UserController {
     public ResponseEntity<User> updateUser(@Valid @RequestBody User user) {
         try {
             if (!userBase.containsKey(user.getId())) {
+                log.debug("Проблема с обновлением Юзера. Несоответствие ID.");
                 return new ResponseEntity<>(user, HttpStatus.NOT_FOUND);
             }
-            log.debug("Пользователь успешно обновлен: " + user + ".");
             userBase.put(user.getId(), user);
+            log.debug("Пользователь успешно обновлен: " + user + ".");
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (Exception e) {
+            log.debug("Проблема с обновлением Юзера. Юзер не обновлен.");
             return new ResponseEntity<>(user, HttpStatus.BAD_REQUEST);
         }
     }

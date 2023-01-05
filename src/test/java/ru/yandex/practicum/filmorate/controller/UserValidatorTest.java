@@ -48,7 +48,7 @@ class UserValidatorTest {
     }
 
     @Test
-    public void validationOfUsersShouldntThrowExceptionWhenAllFine() {
+    public void validationOfUsersShouldNotThrowExceptionWhenAllFine() {
         User user = new User(1, "1@1.ru", "erken", "erkek", LocalDate.of(1992, 12, 01));
         UserValidator.validationOfUsers(user);
 
