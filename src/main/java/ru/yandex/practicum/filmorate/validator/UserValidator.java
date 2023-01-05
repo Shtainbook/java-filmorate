@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.validator;
 
-import org.springframework.http.HttpStatus;
 import ru.yandex.practicum.filmorate.exception.UserValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +11,7 @@ public class UserValidator {
 
     public static void validationOfUsers(User user) {
         if (user == null) {
-            log.error("ошибка зафиксирована: user - " + user);
+            log.error("ошибка зафиксирована: user - " + null);
             throw new UserValidationException("Пользователь отсутствует");
         }
         if (user.getName().isBlank()) {
