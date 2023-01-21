@@ -6,12 +6,14 @@ import lombok.Data;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class User {
-    private long id;
+    private int id;
     @Email(message = "почта не подходит")
     @NotBlank(message = "введи почту")
     @NotNull(message = "введи почту")
@@ -23,4 +25,5 @@ public class User {
     private String name;
     @Past(message = "Нельзя родиться в будущем")
     private LocalDate birthday;
+    private final Set<Integer> friendsUser = new HashSet<>();
 }
