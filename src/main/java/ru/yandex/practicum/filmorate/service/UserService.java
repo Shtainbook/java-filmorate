@@ -26,7 +26,8 @@ public class UserService {
     }
 
     public ResponseEntity<?> addFriend(int base, int friend) { // base - кто дружит, friend - кого дружат
-        checkBodyUser(base, friend);
+        checkBodyUser(base);
+        checkBodyUser(friend);
         inMemoryUserStorage.getUserBase().get(base).getFriendsUser().add(friend);
         inMemoryUserStorage.getUserBase().get(friend).getFriendsUser().add(base);
         log.debug("Дружба наладилась!");
@@ -34,14 +35,16 @@ public class UserService {
     }
 
     public ResponseEntity<?> removeFriend(int base, int friend) { // base - кто дружит, friend - кого дружат
-        checkBodyUser(base, friend);
+        checkBodyUser(base);
+        checkBodyUser(friend);
         inMemoryUserStorage.getUserBase().get(base).getFriendsUser().remove(friend);
         log.debug("С дружбой покончено!");
         return new ResponseEntity<>("Дружба разладилась между " + base + " и " + friend, HttpStatus.OK);
     }
 
     public ResponseEntity<List<User>> showGeneralFriend(int idBase, int idFriend) { //это пересекающиеся друзья
-        checkBodyUser(idBase, idFriend);
+        checkBodyUser(idFriend);
+        checkBodyUser(idBase);
         HashSet<Integer> baza = new HashSet<>(inMemoryUserStorage.getUserBase().get(idBase).getFriendsUser());
         baza.retainAll(inMemoryUserStorage.getUserBase().get(idFriend).getFriendsUser());
         List<User> result = new ArrayList<>();
@@ -56,18 +59,20 @@ public class UserService {
     public ResponseEntity<List<User>> friendZona(int id) { // это показ френд ленты
         checkBodyUser(id);
         List<User> result = new ArrayList<>();
-        for (Integer idUser : inMemoryUserStorage.getUserBase().get(id).getFriendsUser()) {
+        List<Integer> friendsId = new ArrayList<>(inMemoryUserStorage.getUserBase().get(id).getFriendsUser());
+// Евгений! Правильно ли я сделал? (по моей логике мы не можем указывать БД в условиях цикла, как элемент перебора,
+// но при этом мы без проблем можем обращаться к ней внутри цикла.
+// Соответственно я сделал прослойку между этими действиями)
+        for (Integer idUser : friendsId) {
             result.add(inMemoryUserStorage.getUserBase().get(idUser));
         }
         log.debug("Демонстрирую френдзону!");
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    public void checkBodyUser(int... id) {
-        for (int i = 0; i < id.length; i++) {
-            if (!inMemoryUserStorage.getUserBase().containsKey(id[i])) {
-                throw new NotFoundException("Такого " + id[i] + " не содержится в базе.");
-            }
+    private void checkBodyUser(int id) {
+        if (!inMemoryUserStorage.getUserBase().containsKey(id)) {
+            throw new NotFoundException("Такого " + id + " не содержится в базе. Ошибка в базе Юзеров");
         }
     }
 }

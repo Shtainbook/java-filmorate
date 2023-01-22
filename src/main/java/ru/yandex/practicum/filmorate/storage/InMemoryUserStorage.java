@@ -33,7 +33,7 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public ResponseEntity<User> read(int id) {
         if (!userBase.containsKey(id)) {
-            throw new NotFoundException("нет такого закона");
+            throw new NotFoundException("Ошибка в методе delete (user). Не найден юзер");
         }
         log.debug("Действие read залогировано");
         return new ResponseEntity<>(userBase.get(id), HttpStatus.OK);
@@ -54,7 +54,7 @@ public class InMemoryUserStorage implements UserStorage {
             return new ResponseEntity<>(user, HttpStatus.OK);
         }
         log.debug("Пользователь не обновлен: " + user + ".");
-        throw new NotFoundException("нет такого закона");
+        throw new NotFoundException("Ошибка в методе update (user). Не найден юзер");
     }
 
     @Override
@@ -65,6 +65,6 @@ public class InMemoryUserStorage implements UserStorage {
             return new ResponseEntity<>("Пользователь успешно удален.", HttpStatus.OK);
         }
         log.debug("Пользователь успешно не удален");
-        throw new NotFoundException("нет такого закона");
+        throw new NotFoundException("Ошибка в методе delete (user). Не найден юзер");
     }
 }

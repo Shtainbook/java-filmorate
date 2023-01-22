@@ -33,7 +33,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public ResponseEntity<Film> read(int id) {
         if (!filmBase.containsKey(id)) {
-            throw new NotFoundException("нет такого закона");
+            throw new NotFoundException("Ошибка в методе read (film). Не найден фильм");
         }
         log.debug("Действие read залогировано");
         return new ResponseEntity<>(filmBase.get(id), HttpStatus.OK);
@@ -54,7 +54,7 @@ public class InMemoryFilmStorage implements FilmStorage {
             return new ResponseEntity<>(film, HttpStatus.OK);
         }
         log.debug("Фильм не обновлен: " + film + ".");
-        throw new NotFoundException("нет такого закона!");
+        throw new NotFoundException("Ошибка в методе update (film). Не найден фильм");
     }
 
     @Override
@@ -65,6 +65,6 @@ public class InMemoryFilmStorage implements FilmStorage {
             return new ResponseEntity<>("Пользователь успешно удален.", HttpStatus.OK);
         }
         log.debug("Фильм успешно не удален");
-        throw new NotFoundException("нет такого закона");
+        throw new NotFoundException("Ошибка в методе delete (film). Не найден фильм");
     }
 }

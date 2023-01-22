@@ -25,39 +25,38 @@ public class FilmService {
     }
 
     public ResponseEntity<Film> addLikeFilm(int idFilm, int userId) {
-        checkBodyFilm(idFilm, userId);
+        checkBodyFilm(userId);
+        checkBodyFilm(idFilm);
         Film temp = inMemoryFilmStorage.getFilmBase().get(idFilm);
         if (temp != null) {
             temp.getLikeFilm().add(userId);
             log.debug("Лайк к фильму успешно добавлен: " + temp + ".");
         }
-       return new ResponseEntity<>(temp,HttpStatus.OK);
+        return new ResponseEntity<>(temp, HttpStatus.OK);
     }
 
     public ResponseEntity<Film> deleteLikeFilm(int idFilm, int userId) {
-        checkBodyFilm(idFilm, userId);
+        checkBodyFilm(idFilm);
+        checkBodyFilm(userId);
         Film temp = inMemoryFilmStorage.getFilmBase().get(idFilm);
         if (temp != null) {
             temp.getLikeFilm().remove(userId);
             log.debug("Лайк к фильму успешно удален: " + temp + ".");
         }
-        return new ResponseEntity<>(temp,HttpStatus.OK);
+        return new ResponseEntity<>(temp, HttpStatus.OK);
     }
 
     public ResponseEntity<List<Film>> showPopularFilm(int count) {
-
         List<Film> temp = inMemoryFilmStorage.getFilmBase().values().stream().
                 sorted(((o1, o2) -> (o2.getLikeFilm().size() - o1.getLikeFilm().size()))). //сортируем от большего к меньшему
-                limit(count).collect(Collectors.toList());
+                        limit(count).collect(Collectors.toList());
         log.debug("Список фильмов успешно подан!");
         return new ResponseEntity<>(temp, HttpStatus.OK);
     }
 
-    public void checkBodyFilm(int... id) {
-        for (int i = 0; i < id.length; i++) {
-            if (!inMemoryFilmStorage.getFilmBase().containsKey(id[i])) {
-                throw new NotFoundException("Такого " + id[i] + " не содержится в базе.");
-            }
+    private void checkBodyFilm(int id) {
+        if (!inMemoryFilmStorage.getFilmBase().containsKey(id)) {
+            throw new NotFoundException("Такого " + id + " не содержится в базе. Ошибка в базе фильмов.");
         }
     }
 }
