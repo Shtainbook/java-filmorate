@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.storage;
 
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,6 @@ import java.util.Map;
 @Component
 @Slf4j
 public class InMemoryFilmStorage implements FilmStorage {
-    @Getter
     private final Map<Integer, Film> filmBase = new HashMap<>();
     private int filmIdGenerator = 1;
 
@@ -46,7 +44,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public ResponseEntity <Film> update(Film film) {
+    public ResponseEntity<Film> update(Film film) {
         FilmValidator.validationOfFilm(film);
         if (filmBase.containsKey(film.getId())) {
             filmBase.put(film.getId(), film);
@@ -66,5 +64,20 @@ public class InMemoryFilmStorage implements FilmStorage {
         }
         log.debug("Фильм успешно не удален");
         throw new NotFoundException("Ошибка в методе delete (film). Не найден фильм");
+    }
+
+    @Override
+    public boolean contains(int id) {
+        return filmBase.containsKey(id);
+    }
+
+    @Override
+    public Map<Integer, Film> getStorage() {
+        return filmBase;
+    }
+
+    @Override
+    public Film getFilm(int id) {
+        return filmBase.get(id);
     }
 }

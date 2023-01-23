@@ -1,8 +1,6 @@
 package ru.yandex.practicum.filmorate.controllers;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.User;
@@ -10,7 +8,6 @@ import ru.yandex.practicum.filmorate.service.UserService;
 
 import java.util.List;
 
-@Slf4j
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -24,27 +21,27 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<User> read(@PathVariable int id) {
-        return userService.getInMemoryUserStorage().read(id);
+        return userService.read(id);
     }
 
     @GetMapping
     public ResponseEntity<List<User>> readAll() {
-        return userService.getInMemoryUserStorage().readAll();
+        return userService.readAll();
     }
 
     @PostMapping
     public ResponseEntity<User> create(@RequestBody User user) {
-        return userService.getInMemoryUserStorage().create(user);
+        return userService.create(user);
     }
 
     @PutMapping
     public ResponseEntity<User> update(@RequestBody User user) {
-        return userService.getInMemoryUserStorage().update(user);
+        return userService.update(user);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable int id) {
-        return userService.getInMemoryUserStorage().delete(id);
+        return userService.delete(id);
     }
 
     @PutMapping("/{id}/friends/{friendId}")

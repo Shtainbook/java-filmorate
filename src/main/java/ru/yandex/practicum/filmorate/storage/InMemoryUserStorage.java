@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.storage;
 
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,15 +8,11 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.validator.UserValidator;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 @Slf4j
 public class InMemoryUserStorage implements UserStorage {
-    @Getter
     private final Map<Integer, User> userBase = new HashMap<>();
     int userIdGenerator = 1;
 
@@ -66,5 +61,29 @@ public class InMemoryUserStorage implements UserStorage {
         }
         log.debug("Пользователь успешно не удален");
         throw new NotFoundException("Ошибка в методе delete (user). Не найден юзер");
+    }
+    @Override
+    public void addToFriend(int id, int targetId) {
+        userBase.get(id).getFriendsUser().add(targetId);
+    }
+
+    @Override
+    public void deleteFromFriend(int id, int targetId) {
+        userBase.get(id).getFriendsUser().remove(targetId);
+    }
+
+    @Override
+    public Set<Integer> getFriends(int id) {
+        return userBase.get(id).getFriendsUser();
+    }
+
+    @Override
+    public boolean contains(int id) {
+        return userBase.containsKey(id);
+    }
+
+    @Override
+    public User getUser(int id) {
+        return userBase.get(id);
     }
 }

@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.controllers;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,11 +9,9 @@ import ru.yandex.practicum.filmorate.service.FilmService;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
-@Slf4j
 @RestController
 @RequestMapping("/films")
 public class FilmController {
-
 
     private final FilmService filmService;
 
@@ -25,27 +22,27 @@ public class FilmController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Film> read(@PathVariable int id) {
-        return filmService.getInMemoryFilmStorage().read(id);
+        return filmService.read(id);
     }
 
     @GetMapping
     public ResponseEntity<List<Film>> readAll() {
-        return filmService.getInMemoryFilmStorage().readAll();
+        return filmService.readAll();
     }
 
     @PostMapping
     public ResponseEntity<Film> create(@RequestBody Film film) {
-        return filmService.getInMemoryFilmStorage().create(film);
+        return filmService.create(film);
     }
 
     @PutMapping
     public ResponseEntity<Film> update(@RequestBody Film film) {
-        return filmService.getInMemoryFilmStorage().update(film);
+        return filmService.update(film);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable int id) {
-        return filmService.getInMemoryFilmStorage().delete(id);
+        return filmService.delete(id);
     }
 
     @PutMapping("/{id}/like/{userId}")
