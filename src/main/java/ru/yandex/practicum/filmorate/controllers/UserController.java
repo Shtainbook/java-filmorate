@@ -1,66 +1,78 @@
 package ru.yandex.practicum.filmorate.controllers;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.service.user.UserService;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/users")
+@Slf4j
 public class UserController {
-
-    private final UserService userService;
+    private UserStorage userStorage;
+    private UserService userService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(@Qualifier("userDbStorage") UserStorage userStorage, UserService userService) {
+        this.userStorage = userStorage;
         this.userService = userService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<User> read(@PathVariable int id) {
-        return userService.read(id);
-    }
-
     @GetMapping
-    public ResponseEntity<List<User>> readAll() {
-        return userService.readAll();
+    public List<User> getUsers() {
+        return userStorage.getUsers();
     }
 
-    @PostMapping
-    public ResponseEntity<User> create(@RequestBody User user) {
-        return userService.create(user);
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable Long id) {
+        return userStorage.getUserById(id);
     }
 
-    @PutMapping
-    public ResponseEntity<User> update(@RequestBody User user) {
-        return userService.update(user);
+    @GetMapping("/{id}/friends")
+    public List<User> getFriends(@PathVariable Long id) {
+        return userService.getFriends(id);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable int id) {
-        return userService.delete(id);
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public List<User> getCommonFriends(@PathVariable Long id, @PathVariable Long otherId) {
+        return userService.getCommonFriends(id, otherId);
     }
 
     @PutMapping("/{id}/friends/{friendId}")
-    public ResponseEntity<?> addFriend(@PathVariable int id, @PathVariable int friendId) {
-        return userService.addFriend(id, friendId);
+    public void addFriend(@PathVariable Long id, @PathVariable Long friendId) {
+        userService.addFriend(id, friendId);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
-    public ResponseEntity<?> deleteFriend(@PathVariable int id, @PathVariable int friendId) {
-        return userService.removeFriend(id, friendId);
+    public void deleteFriend(@PathVariable Long id, @PathVariable Long friendId) {
+        userService.deleteFriend(id, friendId);
     }
 
-    @GetMapping("/{id}/friends") // показать друзей конкретного пользователя
-    public ResponseEntity<List<User>> showFriendZona(@PathVariable int id) {
-        return userService.friendZona(id);
+    @ResponseBody
+    @PostMapping
+    public User create(@Valid @RequestBody User user) {
+        log.info("Получен POST-запрос к эндпоинту: '/users' на добавление пользователя");
+        user = userStorage.create(user);
+        return user;
     }
 
-    @GetMapping("{id}/friends/common/{otherId}") // показать пересечения друзей
-    public ResponseEntity<List<User>> showTogetherFriends(@PathVariable int id, @PathVariable int otherId) {
-        return userService.showGeneralFriend(id, otherId);
+    @ResponseBody
+    @PutMapping
+    public User update(@Valid @RequestBody User user) {
+        log.info("Получен PUT-запрос к эндпоинту: '/users' на обновление пользователя с ID={}", user.getId());
+        user = userStorage.update(user);
+        return user;
+    }
+
+    @DeleteMapping("/{id}")
+    public User delete(@PathVariable Long id) {
+        log.info("Получен DELETE-запрос к эндпоинту: '/users' на удаление пользователя с ID={}", id);
+        return userStorage.delete(id);
     }
 }

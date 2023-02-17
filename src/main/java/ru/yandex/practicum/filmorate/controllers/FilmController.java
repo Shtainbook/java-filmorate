@@ -1,62 +1,78 @@
 package ru.yandex.practicum.filmorate.controllers;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.service.film.FilmService;
+import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
 
-import javax.validation.constraints.Positive;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/films")
+@Slf4j
 public class FilmController {
-
-    private final FilmService filmService;
+    private FilmStorage filmStorage;
+    private FilmService filmService;
 
     @Autowired
-    public FilmController(FilmService filmService) {
+    public FilmController(@Qualifier("filmDbStorage") FilmStorage filmStorage, FilmService filmService) {
+        this.filmStorage = filmStorage;
         this.filmService = filmService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Film> read(@PathVariable int id) {
-        return filmService.read(id);
-    }
-
     @GetMapping
-    public ResponseEntity<List<Film>> readAll() {
-        return filmService.readAll();
+    public List<Film> getFilms() {
+        return filmStorage.getFilms();
     }
 
-    @PostMapping
-    public ResponseEntity<Film> create(@RequestBody Film film) {
-        return filmService.create(film);
-    }
-
-    @PutMapping
-    public ResponseEntity<Film> update(@RequestBody Film film) {
-        return filmService.update(film);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable int id) {
-        return filmService.delete(id);
-    }
-
-    @PutMapping("/{id}/like/{userId}")
-    public ResponseEntity<Film> addLike(@PathVariable int id, @PathVariable int userId) {
-        return filmService.addLikeFilm(id, userId);
-    }
-
-    @DeleteMapping("/{id}/like/{userId}")
-    public ResponseEntity<Film> deleteLike(@PathVariable int id, @PathVariable int userId) {
-        return filmService.deleteLikeFilm(id, userId);
+    @GetMapping("/{id}")
+    public Film getFilmById(@PathVariable Long id) {
+        return filmStorage.getFilmById(id);
     }
 
     @GetMapping("/popular")
-    public ResponseEntity<List<Film>> showLikeList(@RequestParam(defaultValue = "10", required = false) @Positive int count) {
-        return filmService.showPopularFilm(count);
+    public List<Film> getPopular(@RequestParam(name = "count", defaultValue = "10") Integer count) {
+        return filmService.getPopular(count);
+    }
+
+    @ResponseBody
+    @PostMapping
+    public Film create(@Valid @RequestBody Film film) {
+        log.info("Получен POST-запрос к эндпоинту: '/films' на добавление фильма");
+        InMemoryFilmStorage.isValidFilm(film);
+        film = filmStorage.create(film);
+
+        return film;
+    }
+
+    @ResponseBody
+    @PutMapping
+    public Film update(@Valid @RequestBody Film film) {
+        log.info("Получен PUT-запрос к эндпоинту: '/films' на обновление фильма с ID={}", film.getId());
+        film = filmStorage.update(film);
+        return film;
+    }
+
+    @PutMapping("/{id}/like/{userId}")
+    public void addLike(@PathVariable Long id, @PathVariable Long userId) {
+        log.info("Получен PUT-запрос на добавление лайка");
+        filmService.addLike(id, userId);
+    }
+
+    @DeleteMapping("/{id}/like/{userId}")
+    public void deleteLike(@PathVariable Long id, @PathVariable Long userId) {
+        log.info("Получен DELETE-запрос на удаление лайка");
+        filmService.deleteLike(id, userId);
+    }
+
+    @DeleteMapping("/{id}")
+    public Film delete(@PathVariable Long id) {
+        log.info("Получен DELETE-запрос к эндпоинту: '/films' на удаление фильма с ID={}", id);
+        return filmStorage.delete(id);
     }
 }
