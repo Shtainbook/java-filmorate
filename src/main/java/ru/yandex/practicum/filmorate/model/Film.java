@@ -27,7 +27,7 @@ public class Film {
     private Set<Long> likes = new HashSet<>();
     @NotNull
     private Mpa mpa;
-    @NotNull
+
     private Set<Genre> genres = new HashSet<>();
 
     public Film(Long id, String name, String description, LocalDate releaseDate, Integer duration,
@@ -39,7 +39,7 @@ public class Film {
         this.duration = duration;
         this.likes = likes;
         this.mpa = mpa;
-        this.genres = Objects.requireNonNullElseGet(genres, HashSet::new);
+        this.genres = genres;
     }
 
     public Map<String, Object> toMap() {

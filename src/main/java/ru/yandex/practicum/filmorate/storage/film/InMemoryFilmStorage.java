@@ -80,7 +80,7 @@ public class InMemoryFilmStorage implements FilmStorage {
             log.error("ошибка зафиксирована: film - " + film);
             throw new ValidationException(ValidationException.class + " Название не должно быть пустым");
         }
-        if (film.getDescription().length() > 200) {
+        if (film.getDescription().length() > 200 || (film.getDescription().isEmpty())) {
             log.error("ошибка зафиксирована: film - " + film);
             throw new ValidationException(ValidationException.class + " Описание должно быть до 200 символов");
         }
@@ -88,7 +88,7 @@ public class InMemoryFilmStorage implements FilmStorage {
             log.error("ошибка зафиксирована: film - " + film);
             throw new ValidationException(ValidationException.class + " Релиз должен быть не ранее 1895-12-28");
         }
-        if (film.getDuration() < 0) {
+        if (film.getDuration() <= 0) {
             log.error("ошибка зафиксирована: film - " + film);
             throw new ValidationException(ValidationException.class + " Длительность должна быть позитивной");
 
