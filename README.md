@@ -1,3 +1,3 @@
 # java-filmorate
-Template repository for Filmorate project.
-hello, world
+
+Добро пожаловать в фильмотеку, которая поможет собирать списки фильмов, которые нравятся вам и вашим друзьям.
