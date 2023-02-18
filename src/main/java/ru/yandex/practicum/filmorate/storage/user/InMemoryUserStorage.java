@@ -67,7 +67,6 @@ public class InMemoryUserStorage implements UserStorage {
         if (!users.containsKey(userId)) {
             throw new UserNotFoundException("Пользователь с ID=" + userId + " не найден!");
         }
-        // удаляем из списка друзей пользователя у других пользователей
         for (User user : users.values()) {
             user.getFriends().remove(userId);
         }

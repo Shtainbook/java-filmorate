@@ -27,7 +27,7 @@ public class UserControllerTest {
         userController = new UserController(userStorage, new UserService(userStorage, null));
         user = User.builder()
                 .name("MyName")
-                .login("MaxPower")
+                .login("pupil")
                 .email("1@ya.ru")
                 .birthday(LocalDate.of(1980, 12, 23))
                 .build();
@@ -68,7 +68,7 @@ public class UserControllerTest {
     // проверка контроллера, когда логин пользователя содержит пробелы
     @Test
     public void shouldNoAddUserWhenUserLoginIsContainsSpaces() {
-        user.setLogin("Max Power");
+        user.setLogin("pu pil");
         assertThrows(ValidationException.class, () -> userController.create(user));
         assertEquals(0, userController.getUsers().size(), "Список пользователей должен быть пустым");
     }
@@ -78,8 +78,7 @@ public class UserControllerTest {
     public void shouldAddUserWhenUserNameIsEmpty() {
         user.setName("");
         User user1 = userController.create(user);
-        assertTrue(user1.getName().equals(user.getLogin()),
-                "Имя и логин пользователя должны совпадать");
+        assertEquals(user1.getName(), user.getLogin(), "Имя и логин пользователя должны совпадать");
         assertEquals(1, userController.getUsers().size(), "В списке должен быть один пользователь");
     }
 

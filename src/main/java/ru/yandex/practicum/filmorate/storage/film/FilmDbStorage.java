@@ -52,6 +52,7 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Film create(Film film) {
+        InMemoryFilmStorage.isValidFilm(film);
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("films")
                 .usingGeneratedKeyColumns("id");
@@ -112,16 +113,13 @@ public class FilmDbStorage implements FilmStorage {
                     filmRows.getLong("id"),
                     filmRows.getString("name"),
                     filmRows.getString("description"),
-                    filmRows.getDate("release_date").toLocalDate(),
+                    Objects.requireNonNull(filmRows.getDate("release_date")).toLocalDate(),
                     filmRows.getInt("duration"),
                     new HashSet<>(likeStorage.getLikes(filmRows.getLong("id"))),
                     mpa,
                     genres);
         } else {
             throw new FilmNotFoundException("Фильм с ID=" + filmId + " не найден!");
-        }
-        if (film.getGenres().isEmpty()) {
-            film.setGenres(null);
         }
         return film;
     }

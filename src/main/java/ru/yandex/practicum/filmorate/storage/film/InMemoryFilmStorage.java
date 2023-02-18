@@ -96,18 +96,3 @@ public class InMemoryFilmStorage implements FilmStorage {
         return true;
     }
 }
-
-
-//        if (film.getName().isEmpty()) {
-//            throw new ValidationException("Название фильма не должно быть пустым!");
-//        }
-//        if ((film.getDescription().length()) > 200 || (film.getDescription().isEmpty())) {
-//            throw new ValidationException("Описание фильма больше 200 символов или пустое: " + film.getDescription().length());
-//        }
-//        if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
-//            throw new ValidationException("Некорректная дата релиза фильма: " + film.getReleaseDate());
-//        }
-//        if (film.getDuration() <= 0) {
-//            throw new ValidationException("Продолжительность должна быть положительной: " + film.getDuration());
-//        }
-//        return true;

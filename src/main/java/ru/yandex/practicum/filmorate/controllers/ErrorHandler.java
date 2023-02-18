@@ -29,41 +29,7 @@ public class ErrorHandler {
         log.error(e.getMessage());
         return new ResponseEntity<>(new RuntimeException(e.getMessage()), HttpStatus.NOT_FOUND);
     }
-
-
-
-
 }
-
-//    @ExceptionHandler
-//    @ResponseStatus(HttpStatus.NOT_FOUND)
-//    public ErrorResponse handleUserNotFoundException(final UserNotFoundException e) {
-//        return new ErrorResponse(e.getMessage());
-//    }
-//    @ExceptionHandler
-//    @ResponseStatus(HttpStatus.NOT_FOUND)
-//    public ErrorResponse handleMpaNotFoundException(final MpaNotFoundException e) {
-//        return new ErrorResponse(e.getMessage());
-//    }
-//
-//    @ExceptionHandler
-//    @ResponseStatus(HttpStatus.NOT_FOUND)
-//    public ErrorResponse handleGenreNotFoundException(final GenreNotFoundException e) {
-//        return new ErrorResponse(e.getMessage());
-//    }
-//
-//    @ExceptionHandler
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    public ErrorResponse handleValidationException(final ValidationException e) {
-//        return new ErrorResponse(e.getMessage());
-//    }
-//
-//    @ExceptionHandler
-//    @ResponseStatus(HttpStatus.NOT_FOUND)
-//    public ErrorResponse handleFilmNotFoundException(FilmNotFoundException e) {
-//        return new ErrorResponse(e.getMessage());
-//    }
-
 
 
 

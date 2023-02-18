@@ -46,21 +46,21 @@ class FilmoRateApplicationTests {
     @BeforeEach
     public void beforeEach() {
         firstUser = User.builder()
-                .name("MisterFirst")
+                .name("First")
                 .login("First")
                 .email("1@ya.ru")
                 .birthday(LocalDate.of(1980, 12, 23))
                 .build();
 
         secondUser = User.builder()
-                .name("MisterSecond")
+                .name("Second")
                 .login("Second")
                 .email("2@ya.ru")
                 .birthday(LocalDate.of(1980, 12, 24))
                 .build();
 
         thirdUser = User.builder()
-                .name("MisterThird")
+                .name("Third")
                 .login("Third")
                 .email("3@ya.ru")
                 .birthday(LocalDate.of(1980, 12, 25))
@@ -109,7 +109,7 @@ class FilmoRateApplicationTests {
                 .hasValueSatisfying(user ->
                         assertThat(user)
                                 .hasFieldOrPropertyWithValue("id", firstUser.getId())
-                                .hasFieldOrPropertyWithValue("name", "MisterFirst"));
+                                .hasFieldOrPropertyWithValue("name", "First"));
     }
 
     @Test
