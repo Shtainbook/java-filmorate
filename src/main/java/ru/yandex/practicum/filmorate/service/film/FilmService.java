@@ -27,16 +27,6 @@ public class FilmService {
         this.likeStorage = likeStorage;
     }
 
-//    @Autowired
-//    public FilmService(@Qualifier("filmDbStorage") FilmStorage filmStorage,
-//                       @Qualifier("userDbStorage") UserStorage userStorage
-//                       ) {
-//        this.filmStorage = filmStorage;
-//        this.userStorage = userStorage;
-//
-//    }
-
-
     public List<Film> getFilms() {
         return filmStorage.getFilms();
     }

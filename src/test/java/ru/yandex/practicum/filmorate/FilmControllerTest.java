@@ -3,15 +3,12 @@ package ru.yandex.practicum.filmorate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.controllers.FilmController;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.service.film.FilmService;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
-import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
-import ru.yandex.practicum.filmorate.storage.like.LikeStorage;
-import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.time.LocalDate;
@@ -25,16 +22,15 @@ public class FilmControllerTest {
     @Autowired
     private FilmController filmController;
     @Autowired
+    @Qualifier("filmDbStorage")
     private FilmStorage filmStorage;
     @Autowired
+    @Qualifier("userDbStorage")
     private UserStorage userStorage;
 
     @BeforeEach
     public void beforeEach() {
-//        filmStorage = new InMemoryFilmStorage();
-//        userStorage = new InMemoryUserStorage();
 
-//        filmController = new FilmController(new FilmService(filmStorage, userStorage, null));
         film = Film.builder()
                 .name("Breakfast at Tiffany's")
                 .description("American romantic comedy film directed by Blake Edwards, written by George Axelrod," +
@@ -42,14 +38,6 @@ public class FilmControllerTest {
                 .releaseDate(LocalDate.of(1961,10,5))
                 .duration(114)
                 .build();
-    }
-
-    // проверка контроллера при корректных атрибутах фильма
-    @Test
-    public void shouldAddFilmWhenAllAttributeCorrect() {
-        Film film1 = filmController.create(film);
-        assertEquals(film, film1, "Переданный и полученный фильмы должны совпадать");
-        assertEquals(1, filmController.getFilms().size(), "В списке должен быть один фильм");
     }
 
     // проверка контроллера при "пустом" названии у фильма

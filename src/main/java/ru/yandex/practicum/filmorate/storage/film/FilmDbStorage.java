@@ -10,8 +10,6 @@ import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
-import ru.yandex.practicum.filmorate.service.genre.GenreService;
-import ru.yandex.practicum.filmorate.service.mpa.MpaService;
 import ru.yandex.practicum.filmorate.storage.genre.GenreStorage;
 import ru.yandex.practicum.filmorate.storage.like.LikeStorage;
 import ru.yandex.practicum.filmorate.storage.mpa.MpaStorage;
@@ -63,7 +61,6 @@ public class FilmDbStorage implements FilmStorage {
             for (Genre genre : film.getGenres()) {
                 genre.setName(genreStorage.getGenreById(genre.getId()).getName());
             }
-            //genreService.putGenres(film);
             genreStorage.delete(film);
             genreStorage.add(film);
         }
@@ -95,7 +92,6 @@ public class FilmDbStorage implements FilmStorage {
                     genre.setName(genreStorage.getGenreById(genre.getId()).getName());
                 }
             }
-            //genreService.putGenres(film);
             genreStorage.delete(film);
             genreStorage.add(film);
             return film;

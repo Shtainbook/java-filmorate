@@ -61,13 +61,6 @@ public class GenreStorage {
         }
     }
 
-    //    public List<Genre> getFilmGenres(Long filmId) {
-//        String sql = "SELECT genre_id, name FROM film_genres" +
-//                " INNER JOIN genres ON genre_id = id WHERE film_id = ?";
-//        return jdbcTemplate.query(sql, (rs, rowNum) -> new Genre(
-//                rs.getInt("genre_id"), rs.getString("name")), filmId
-//        );
-//    }
     public Set<Genre> getFilmGenres(Long filmId) {
         String sql = "SELECT genre_id, name FROM film_genres" +
                 " INNER JOIN genres ON genre_id = id WHERE film_id = ?";
