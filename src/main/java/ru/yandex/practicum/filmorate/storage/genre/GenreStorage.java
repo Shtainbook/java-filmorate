@@ -4,12 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.exceptions.GenreNotFoundException;
+import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Component
@@ -41,7 +43,7 @@ public class GenreStorage {
                     genreRows.getString("name")
             );
         } else {
-            throw new GenreNotFoundException("Жанр с ID=" + genreId + " не найден!");
+            throw new NotFoundException("Жанр с ID=" + genreId + " не найден!");
         }
         return genre;
     }
@@ -59,11 +61,19 @@ public class GenreStorage {
         }
     }
 
-    public List<Genre> getFilmGenres(Long filmId) {
+    //    public List<Genre> getFilmGenres(Long filmId) {
+//        String sql = "SELECT genre_id, name FROM film_genres" +
+//                " INNER JOIN genres ON genre_id = id WHERE film_id = ?";
+//        return jdbcTemplate.query(sql, (rs, rowNum) -> new Genre(
+//                rs.getInt("genre_id"), rs.getString("name")), filmId
+//        );
+//    }
+    public Set<Genre> getFilmGenres(Long filmId) {
         String sql = "SELECT genre_id, name FROM film_genres" +
                 " INNER JOIN genres ON genre_id = id WHERE film_id = ?";
-        return jdbcTemplate.query(sql, (rs, rowNum) -> new Genre(
+        List<Genre> temp = jdbcTemplate.query(sql, (rs, rowNum) -> new Genre(
                 rs.getInt("genre_id"), rs.getString("name")), filmId
         );
+        return new HashSet<>(temp);
     }
 }

@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.storage.user;
 
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
+import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
@@ -25,6 +25,7 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public List<User> getUsers() {
+
         return new ArrayList<>(users.values());
     }
 
@@ -43,7 +44,7 @@ public class InMemoryUserStorage implements UserStorage {
             throw new ValidationException("Передан пустой аргумент!");
         }
         if (!users.containsKey(user.getId())) {
-            throw new UserNotFoundException("Пользователь с ID=" + user.getId() + " не найден!");
+            throw new NotFoundException("Пользователь с ID=" + user.getId() + " не найден!");
         }
         if (isValidUser(user)) {
             users.put(user.getId(), user);
@@ -54,7 +55,7 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public User getUserById(Long userId) {
         if (!users.containsKey(userId)) {
-            throw new UserNotFoundException("Пользователь с ID=" + userId + " не найден!");
+            throw new NotFoundException("Пользователь с ID=" + userId + " не найден!");
         }
         return users.get(userId);
     }
@@ -65,7 +66,7 @@ public class InMemoryUserStorage implements UserStorage {
             throw new ValidationException("Передан пустой аргумент!");
         }
         if (!users.containsKey(userId)) {
-            throw new UserNotFoundException("Пользователь с ID=" + userId + " не найден!");
+            throw new NotFoundException("Пользователь с ID=" + userId + " не найден!");
         }
         for (User user : users.values()) {
             user.getFriends().remove(userId);

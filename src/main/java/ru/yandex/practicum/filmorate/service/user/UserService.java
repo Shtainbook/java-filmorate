@@ -15,8 +15,28 @@ import java.util.Set;
 
 @Service
 public class UserService {
-    private UserStorage userStorage;
-    private FriendStorage friendStorage;
+    private final UserStorage userStorage;
+    private final FriendStorage friendStorage;
+
+    public List<User> getUsers() {
+        return userStorage.getUsers();
+    }
+
+    public User getUserById(Long userId) {
+        return userStorage.getUserById(userId);
+    }
+
+    public User create(User user) {
+        return userStorage.create(user);
+    }
+
+    public User update(User user) {
+        return userStorage.update(user);
+    }
+
+    public User delete(Long userId) {
+        return userStorage.delete(userId);
+    }
 
     @Autowired
     public UserService(@Qualifier("userDbStorage") UserStorage userStorage, FriendStorage friendStorage) {

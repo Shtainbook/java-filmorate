@@ -16,22 +16,22 @@ import java.util.Collection;
 @Slf4j
 public class MpaController {
 
-        private MpaService mpaService;
+    private final MpaService mpaService;
 
-        @Autowired
-        public MpaController(MpaService mpaService) {
-            this.mpaService = mpaService;
-        }
+    @Autowired
+    public MpaController(MpaService mpaService) {
+        this.mpaService = mpaService;
+    }
 
-        @GetMapping
-        public Collection<Mpa> getAllMpa() {
-            log.info("Получен GET-запрос к эндпоинту: '/mpa' на получение всех рейтингов");
-            return mpaService.getAllMpa();
-        }
+    @GetMapping
+    public Collection<Mpa> getAllMpa() {
+        log.info("Получен GET-запрос к эндпоинту: '/mpa' на получение всех рейтингов");
+        return mpaService.getAllMpa();
+    }
 
-        @GetMapping("/{id}")
-        public Mpa getMpaById(@PathVariable Integer id) {
-            log.info("Получен GET-запрос к эндпоинту: '/mpa' на получение рейтинга с ID={}", id);
-            return mpaService.getMpaById(id);
-        }
+    @GetMapping("/{id}")
+    public Mpa getMpaById(@PathVariable Integer id) {
+        log.info("Получен GET-запрос к эндпоинту: '/mpa' на получение рейтинга с ID={}", id);
+        return mpaService.getMpaById(id);
+    }
 }

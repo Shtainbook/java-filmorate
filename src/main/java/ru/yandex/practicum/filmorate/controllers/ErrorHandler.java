@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
+import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 
 @RestControllerAdvice
@@ -18,10 +18,10 @@ public class ErrorHandler {
         return new ResponseEntity<>(new ValidationException(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<UserNotFoundException> notFoundObject(UserNotFoundException e) {
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<NotFoundException> notFoundObject(NotFoundException e) {
         log.error(e.getMessage());
-        return new ResponseEntity<>(new UserNotFoundException(e.getMessage()), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new NotFoundException(e.getMessage()), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler

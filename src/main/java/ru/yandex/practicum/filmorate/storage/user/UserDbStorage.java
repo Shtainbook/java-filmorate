@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.exceptions.UserNotFoundException;
+import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
@@ -65,7 +65,7 @@ public class UserDbStorage implements UserStorage {
             log.info("Пользователь с ID={} успешно обновлен", user.getId());
             return user;
         } else {
-            throw new UserNotFoundException("Пользователь с ID=" + user.getId() + " не найден!");
+            throw new NotFoundException("Пользователь с ID=" + user.getId() + " не найден!");
         }
     }
 
@@ -85,7 +85,7 @@ public class UserDbStorage implements UserStorage {
                     Objects.requireNonNull(userRows.getDate("birthday")).toLocalDate(),
                     null);
         } else {
-            throw new UserNotFoundException("Пользователь с ID=" + userId + " не найден!");
+            throw new NotFoundException("Пользователь с ID=" + userId + " не найден!");
         }
         return user;
     }
@@ -98,7 +98,7 @@ public class UserDbStorage implements UserStorage {
         User user = getUserById(userId);
         String sqlQuery = "DELETE FROM users WHERE id = ? ";
         if (jdbcTemplate.update(sqlQuery, userId) == 0) {
-            throw new UserNotFoundException("Пользователь с ID=" + userId + " не найден!");
+            throw new NotFoundException("Пользователь с ID=" + userId + " не найден!");
         }
         return user;
     }

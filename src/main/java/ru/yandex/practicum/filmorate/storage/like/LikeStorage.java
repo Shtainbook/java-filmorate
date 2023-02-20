@@ -4,24 +4,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.service.genre.GenreService;
-import ru.yandex.practicum.filmorate.service.mpa.MpaService;
+import ru.yandex.practicum.filmorate.storage.genre.GenreStorage;
+import ru.yandex.practicum.filmorate.storage.mpa.MpaStorage;
 
 import java.util.HashSet;
 import java.util.List;
 
-
 @Component
 public class LikeStorage {
     private final JdbcTemplate jdbcTemplate;
-    private MpaService mpaService;
-    private GenreService genreService;
+    private final MpaStorage mpaStorage;
+    private final GenreStorage genreStorage;
 
     @Autowired
-    public LikeStorage(JdbcTemplate jdbcTemplate, MpaService mpaService, GenreService genreService) {
+    public LikeStorage(JdbcTemplate jdbcTemplate, MpaStorage mpaStorage, GenreStorage genreStorage) {
         this.jdbcTemplate = jdbcTemplate;
-        this.mpaService = mpaService;
-        this.genreService = genreService;
+        this.mpaStorage = mpaStorage;
+        this.genreStorage = genreStorage;
     }
 
     public void addLike(Long filmId, Long userId) {
@@ -46,8 +45,8 @@ public class LikeStorage {
                         rs.getDate("release_Date").toLocalDate(),
                         rs.getInt("duration"),
                         new HashSet<>(getLikes(rs.getLong("id"))),
-                        mpaService.getMpaById(rs.getInt("rating_id")),
-                        genreService.getFilmGenres(rs.getLong("id"))),
+                        mpaStorage.getMpaById(rs.getInt("rating_id")),
+                        genreStorage.getFilmGenres(rs.getLong("id"))),
                 count);
     }
 

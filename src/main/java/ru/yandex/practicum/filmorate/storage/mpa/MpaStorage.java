@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.exceptions.MpaNotFoundException;
+import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Mpa;
 
@@ -39,7 +39,7 @@ public class MpaStorage {
                     mpaRows.getString("name")
             );
         } else {
-            throw new MpaNotFoundException("Рейтинг с ID=" + mpaId + " не найден!");
+            throw new NotFoundException("Рейтинг с ID=" + mpaId + " не найден!");
         }
         return mpa;
     }
